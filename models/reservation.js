@@ -13,11 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       reservation.belongsTo(models.user);
       reservation.belongsTo(models.training);
-    }
+     }
   };
   reservation.init({
-    userId: DataTypes.INTEGER,
-    trainingId: DataTypes.INTEGER
+    userId: {type: DataTypes.INTEGER, allowNull: false},
+    trainingId: {type: DataTypes.INTEGER, allowNull: false}
   }, {
     sequelize,
     modelName: 'reservation',

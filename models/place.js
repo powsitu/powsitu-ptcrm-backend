@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       place.hasOne(models.image);
+      place.hasMany(models.training);
     }
   };
   place.init({

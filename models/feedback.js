@@ -12,11 +12,12 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       feedback.belongsTo(models.user);
+      feedback.belongsTo(models.training);
     }
   };
   feedback.init({
-    userId: DataTypes.INTEGER,
-    trainingId: DataTypes.INTEGER,
+    userId: {type: DataTypes.INTEGER, allowNull: false},
+    trainingId: {type: DataTypes.INTEGER, allowNull: false},
     rating: DataTypes.INTEGER,
     comment: DataTypes.STRING
   }, {

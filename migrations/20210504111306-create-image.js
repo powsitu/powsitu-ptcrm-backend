@@ -16,7 +16,6 @@ module.exports = {
       },
       trainingTypeId: {
         type: Sequelize.INTEGER,
-        allowNull: true,
         references: {
           model: "trainingTypes",
           key: "id"
@@ -26,7 +25,6 @@ module.exports = {
       },
       placeId: {
         type: Sequelize.INTEGER,
-        allowNull: true,
         references: {
           model: "places",
           key: "id"

@@ -21,11 +21,15 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: true
       },
-      placeId: {
-        type: Sequelize.INTEGER
-      },
       trainingTypeId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "trainingTypes",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL"
       },
       createdAt: {
         allowNull: false,

@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      training.belongsTo(models.place);
+      training.hasMany(models.reservation);
+      training.belongsTo(models.trainingType);
+      training.hasMany(models.feedback);
     }
   };
   training.init({
@@ -22,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: true
     },
     placeId: DataTypes.INTEGER,
-    trainingTypeId: DataTypes.INTEGER
+    trainingTypeId: {type: DataTypes.INTEGER, allowNull: false}
   }, {
     sequelize,
     modelName: 'training',
