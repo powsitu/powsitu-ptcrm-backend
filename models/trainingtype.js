@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      trainingType.hasOne(models.image);
     }
   };
   trainingType.init({
