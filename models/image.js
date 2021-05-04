@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      image.belongsTo(models.trainingTypeId);
+      image.belongsTo(models.trainingType);
+      image.belongsTo(models.place);
     }
   };
   image.init({
