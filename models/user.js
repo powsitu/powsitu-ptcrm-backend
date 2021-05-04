@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      user.hasMany(models.reservation);
+      user.hasMany(models.checkin);
+      user.hasMany(models.feedback);
     }
   };
   user.init({

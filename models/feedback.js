@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      feedback.belongsTo(models.user);
     }
   };
   feedback.init({
