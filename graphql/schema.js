@@ -109,6 +109,7 @@ const typeDefs = gql`
     trainings: [Training]
     trainingThisDay(date: String!): [Training]
     feedbacks: [Feedback]
+    feedbackForUser(id: ID!): [Feedback]
     reservations: [Reservation]
     reservationsForUser(id: ID!): [Reservation]
   }
