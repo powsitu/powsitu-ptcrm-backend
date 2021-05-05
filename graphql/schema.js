@@ -113,6 +113,11 @@ const typeDefs = gql`
     reservations: [Reservation]
     reservationsForUser(id: ID!): [Reservation]
   }
+
+  type Mutation {
+    makeReservation(userId: ID!, trainingId: Int!): Reservation!
+    cancelReservation(reservationId: ID!): Reservation!
+  }
 `;
 
 module.exports = { typeDefs };

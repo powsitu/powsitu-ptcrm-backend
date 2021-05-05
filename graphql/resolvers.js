@@ -88,5 +88,16 @@ module.exports = {
       });
       return result;
     }
+  },
+  Mutation: {
+    makeReservation: async ( parent, { userId, trainingId }, { db }, info) => {
+      const newReservation = await db.reservation.create({ userId, trainingId });
+      return newReservation;
+    },
+    cancelReservation: async ( parent, { reservationId }, { db }, info) => {
+      const reservation = await db.reservation.findByPk(reservationId);
+      await reservation.destroy();
+      return true;
+    }
   }
 }
