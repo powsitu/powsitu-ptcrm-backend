@@ -9,7 +9,7 @@ app.use(corsMiddleWare());
 app.use(express.json());
 
 // start of stuff to initialize graphql
-const { ApolloServer, gql } = require("apollo-server-express");
+const { ApolloServer } = require("apollo-server-express");
 const db = require("./models");
 const { typeDefs } = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");

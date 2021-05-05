@@ -15,7 +15,7 @@ module.exports = {
      'trainings',
      [
        {
-        date: new Date(),
+        date: new Date().toISOString().slice(0, 10),
         time: "17:00",
         attendees: 6,
         isBookable: true,
@@ -25,7 +25,7 @@ module.exports = {
         updatedAt: new Date()
        },
        {
-        date: new Date(),
+        date: new Date().toISOString().slice(0, 10),
         time: "18:30",
         attendees: 8,
         isBookable: true,
@@ -35,7 +35,7 @@ module.exports = {
         updatedAt: new Date()
        },
        {
-        date: new Date(),
+        date: new Date().toISOString().slice(0, 10),
         time: "10:00",
         attendees: 8,
         isBookable: true,
@@ -45,7 +45,7 @@ module.exports = {
         updatedAt: new Date()
        },
        {
-        date: new Date(),
+        date: new Date().toISOString().slice(0, 10),
         time: "11:30",
         attendees: 1,
         isBookable: false,
@@ -55,7 +55,7 @@ module.exports = {
         updatedAt: new Date()
        },
        {
-        date: new Date(),
+        date: new Date().toISOString().slice(0, 10),
         time: "14:00",
         attendees: 10,
         isBookable: true,
@@ -65,7 +65,7 @@ module.exports = {
         updatedAt: new Date()
        },
        {
-        date: new Date(),
+        date: new Date().toISOString().slice(0, 10),
         time: "15:30",
         attendees: 20,
         isBookable: true,

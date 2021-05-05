@@ -38,7 +38,7 @@ const typeDefs = gql`
   type Checkin {
     id: ID!
     user: User!
-    date: Date
+    date: String
     calories: Int
     proteins: Int
     carbs: Int
@@ -73,7 +73,7 @@ const typeDefs = gql`
 
   type Training {
     id: ID!
-    date: Date
+    date: String
     time: String
     attendees: Int
     isBookable: Boolean
@@ -102,12 +102,15 @@ const typeDefs = gql`
   type Query {
     users: [User]
     checkins: [Checkin]
+    checkinForUser(id: ID!): Checkin
     trainingTypes: [TrainingType]
     places: [Place]
     images: [Image]
     trainings: [Training]
+    trainingThisDay(date: String!): [Training]
     feedbacks: [Feedback]
     reservations: [Reservation]
+    reservationsForUser(id: ID!): [Reservation]
   }
 `;
 

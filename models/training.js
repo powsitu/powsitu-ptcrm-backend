@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   training.init({
-    date: DataTypes.DATE,
+    date: DataTypes.STRING,
     time: DataTypes.TIME,
     attendees: DataTypes.INTEGER,
     isBookable: {
