@@ -1,6 +1,29 @@
 const { gql } = require("apollo-server-express");
+const { GraphQLScalarType, Kind } = require('graphql');
+
+// adding a custom scalar type to graphql for date types
+// code found here: https://www.apollographql.com/docs/apollo-server/schema/custom-scalars/
+const dateScalar = new GraphQLScalarType({
+  name: 'Date',
+  description: 'Date custom scalar type',
+  serialize(value) {
+    return value.getTime(); // Convert outgoing Date to integer for JSON
+  },
+  parseValue(value) {
+    return new Date(value); // Convert incoming integer to Date
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.INT) {
+      return new Date(parseInt(ast.value, 10)); // Convert hard-coded AST string to integer and then to Date
+    }
+    return null; // Invalid hard-coded value (not an integer)
+  },
+});
+
 
 const typeDefs = gql`
+  scalar Date
+
   type User {
     id: ID!
     email: String!
@@ -14,8 +37,8 @@ const typeDefs = gql`
 
   type Checkin {
     id: ID!
-    userId: User!
-    date: String
+    user: User!
+    date: Date
     calories: Int
     proteins: Int
     carbs: Int
@@ -44,32 +67,32 @@ const typeDefs = gql`
     id: ID!
     url: String
     description: String
-    trainingTypeId: TrainingType!
-    placeId: Place!
+    trainingType: TrainingType
+    placeId: Place
   }
 
   type Training {
     id: ID!
-    date: String
+    date: Date
     time: String
     attendees: Int
     isBookable: Boolean
-    placeId: Place!
-    trainingTypeId: TrainingType!
+    place: Place
+    trainingType: TrainingType!
   }
 
   type Feedback {
     id: ID!
-    userId: User!
-    trainingId: Training!
+    user: User!
+    training: Training!
     rating: Int
     comment: String
   }
 
   type Reservation {
     id: ID!
-    userId: User!
-    trainingId: Training!
+    user: User!
+    training: Training!
   }
 
   type Login {
