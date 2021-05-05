@@ -8,6 +8,11 @@ module.exports = {
       return result;
     },
 
+    user: async ( parent, { id }, { db }, info) => {
+      const result = await db.user.findByPk(id);
+      return result;
+    },
+
     checkins: async ( parent, _args, { db }, info) => {
       const result = await db.checkin.findAll({ include: {model: db.user} });
       console.log(result);
@@ -95,13 +100,13 @@ module.exports = {
       return newReservation;
     },
 
-    cancelReservation: async ( parent, { reservationId }, { db }, info) => {
-      const reservation = await db.reservation.findByPk(reservationId);
-      await reservation.destroy();
-      return true;
+    removeReservation: async ( parent, { reservationId }, { db }, info) => {
+      const ciaoReservation = await db.reservation.findByPk(reservationId);
+      await ciaoReservation.destroy();
+      return ciaoReservation;
     },
 
-    giveFeedback: async ( parent, _args, { db }, info) => {
+    addFeedback: async ( parent, _args, { db }, info) => {
       const newFeedback = await db.feedback.create(_args);
       return newFeedback;
     },
@@ -109,6 +114,59 @@ module.exports = {
     addCheckin: async ( parent, _args, { db }, info) => {
       const newCheckin = await db.checkin.create(_args);
       return newCheckin;
-    }
+    },
+
+    switchBlockStatus: async ( parent, { userId }, { db }, info) => {
+      const userToSwitch = await db.user.findByPk(userId);
+      const newStatus = !userToSwitch.isBlocked
+      await userToSwitch.update({isBlocked: newStatus});
+      return userToSwitch;
+    },
+
+    addTrainingType: async ( parent, _args, { db }, info) => {
+      const newTrainingType = await db.trainingType.create(_args);
+      return newTrainingType;
+    },
+
+    modifyTrainingType: async ( parent, _args, { db }, info) => {
+
+    },
+
+    removeTrainingType: async ( parent, { trainingTypeId }, { db }, info) => {
+      const ciaoTrainingType = await db.trainingType.findByPk(trainingTypeId);
+      await ciaoTrainingType.destroy();
+      return ciaoTrainingType;
+    },
+
+    addTraining: async ( parent, _args, { db }, info) => {
+      const newTraining = await db.training.create(_args);
+      return newTraining;
+    },
+
+    modifyTraining: async ( parent, _args, { db }, info) => {
+
+    },
+
+    removeTraining: async ( parent, { trainingId} , { db }, info) => {
+      const ciaoTraining = await db.training.findByPk(trainingId);
+      await ciaoTraining.destroy();
+      return ciaoTraining;
+    },
+
+    addPlace: async ( parent, _args, { db }, info) => {
+      const newPlace = await db.place.create(_args);
+      return newPlace;
+    },
+
+    modifyPlace: async ( parent, _args, { db }, info) => {
+
+    },
+
+    removePlace: async ( parent, { placeId }, { db }, info) => {
+      const ciaoPlace = await db.place.findByPk(placeId);
+      await ciaoPlace.destroy();
+      return ciaoPlace;
+    },
+
   }
 }

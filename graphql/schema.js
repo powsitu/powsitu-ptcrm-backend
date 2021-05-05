@@ -101,6 +101,7 @@ const typeDefs = gql`
 
   type Query {
     users: [User]
+    user(id: ID!): User
     checkins: [Checkin]
     checkinForUser(id: ID!): Checkin
     trainingTypes: [TrainingType]
@@ -116,9 +117,19 @@ const typeDefs = gql`
 
   type Mutation {
     makeReservation(userId: ID!, trainingId: Int!): Reservation!
-    cancelReservation(reservationId: ID!): Reservation!
-    giveFeedback(userId: ID!, trainingId: Int!, rating: Int, comment: String): Feedback!
+    removeReservation(reservationId: ID!): Reservation!
+    addFeedback(userId: ID!, trainingId: Int!, rating: Int, comment: String): Feedback!
     addCheckin(userId: ID!,date: String, calories: Int, proteins: Int, carbs: Int, fats: Int, dailyRating: Int, comment: String): Checkin!
+    switchBlockStatus(userId: ID!): User!
+    addTrainingType(name: String, description: String, intensity: String): TrainingType!
+    modifyTrainingType(trainingTypeId: ID!,name: String, description: String, intensity: String): TrainingType!
+    removeTrainingType(trainingTypeId: ID!): TrainingType!
+    addTraining(date: String, time: String, attendees: Int, isBookable: Boolean, placeId: Int, trainingTypeId: Int): Training!
+    modifyTraining(trainingId: ID!,date: String, time: String, attendees: Int, isBookable: Boolean, placeId: Int, trainingTypeId: Int): Training!
+    removeTraining(trainingId: ID!): Training!
+    addPlace(street: String, city: String, zip: String, country: String, description: String): Place!
+    modifyPlace(placeId: Int,street: String, city: String, zip: String, country: String, description: String): Place!
+    removePlace(placeId: Int): Place!
   }
 `;
 
