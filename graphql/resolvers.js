@@ -94,10 +94,21 @@ module.exports = {
       const newReservation = await db.reservation.create({ userId, trainingId });
       return newReservation;
     },
+
     cancelReservation: async ( parent, { reservationId }, { db }, info) => {
       const reservation = await db.reservation.findByPk(reservationId);
       await reservation.destroy();
       return true;
+    },
+
+    giveFeedback: async ( parent, _args, { db }, info) => {
+      const newFeedback = await db.feedback.create(_args);
+      return newFeedback;
+    },
+
+    addCheckin: async ( parent, _args, { db }, info) => {
+      const newCheckin = await db.checkin.create(_args);
+      return newCheckin;
     }
   }
 }

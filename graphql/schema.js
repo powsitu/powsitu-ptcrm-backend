@@ -117,6 +117,8 @@ const typeDefs = gql`
   type Mutation {
     makeReservation(userId: ID!, trainingId: Int!): Reservation!
     cancelReservation(reservationId: ID!): Reservation!
+    giveFeedback(userId: ID!, trainingId: Int!, rating: Int, comment: String): Feedback!
+    addCheckin(userId: ID!,date: String, calories: Int, proteins: Int, carbs: Int, fats: Int, dailyRating: Int, comment: String): Checkin!
   }
 `;
 
