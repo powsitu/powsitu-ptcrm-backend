@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { toJWT } = require("../auth/jwt");
 const { SALT_ROUNDS } = require("../config/myVars");
 const db = require("../models");
+const auth = require("../auth/middleware");
 
 module.exports = {
   Query: {
@@ -46,7 +47,8 @@ module.exports = {
       return result;
     },
 
-    getAllReservationsForUser: async (parent, { id }) => {
+    getAllReservationsForUser: async (parent, { id }, { req }) => {
+      const user = await auth(req);
       const result = await db.reservation.findAll({
         where: { userId: id },
         include: [

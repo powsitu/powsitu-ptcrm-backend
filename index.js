@@ -10,14 +10,15 @@ app.use(express.json());
 
 // start of stuff to initialize graphql
 const { ApolloServer } = require("apollo-server-express");
-// const db = require("./models");
 const { typeDefs } = require("./graphql/schema");
 const resolvers = require("./graphql/resolvers");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => ({ req }),
+  context: ({ req }) => {
+    return { req };
+  },
 });
 server.applyMiddleware({ app });
 // end of graphql stuff
