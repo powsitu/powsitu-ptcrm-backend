@@ -111,10 +111,11 @@ const typeDefs = gql`
     getAllFeedbacks: [Feedback]
     getFeedbacksForUser(id: ID!): [Feedback]
     getAllReservations: [Reservation]
-    getOneReservationsForUser(id: ID!): [Reservation]
+    getAllReservationsForUser(id: ID!): [Reservation]
   }
 
   type Mutation {
+    login(email: String!, password: String!): Login!
     makeReservation(userId: ID!, trainingId: Int!): Reservation!
     removeReservation(reservationId: ID!): Reservation!
     addFeedback(

@@ -1,4 +1,5 @@
 const { ApolloError } = require("apollo-server-express");
+const bcrypt = require("bcrypt");
 
 module.exports = {
   Query: {
@@ -42,7 +43,7 @@ module.exports = {
       return result;
     },
 
-    getOneReservationsForUser: async (parent, { id }, { db }, info) => {
+    getAllReservationsForUser: async (parent, { id }, { db }, info) => {
       const result = await db.reservation.findAll({
         where: { userId: id },
         include: [
@@ -171,6 +172,18 @@ module.exports = {
       const ciaoPlace = await db.place.findByPk(placeId);
       await ciaoPlace.destroy();
       return ciaoPlace;
+    },
+
+    login: async (parent, { email, password }, { db }, info) => {
+      const loginUser = await db.user.findOne({ email });
+      let message;
+      if (loginUser && bcrypt.compareSync(password, loginUser.password)) {
+        message = "password ok";
+        return console.log(message);
+      } else {
+        message = "wrong password!";
+        return console.log(message);
+      }
     },
   },
 };
