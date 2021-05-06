@@ -2,50 +2,51 @@ const { ApolloError } = require("apollo-server-express");
 const bcrypt = require("bcrypt");
 const { toJWT } = require("../auth/jwt");
 const { SALT_ROUNDS } = require("../config/myVars");
+const db = require("../models");
 
 module.exports = {
   Query: {
-    getAllUsers: async (parent, _args, { db }, info) => {
+    getAllUsers: async (parent, _args) => {
       const result = await db.user.findAll();
       return result;
     },
 
-    getOneUser: async (parent, { id }, { db }, info) => {
+    getOneUser: async (parent, { id }) => {
       const result = await db.user.findByPk(id);
       return result;
     },
 
-    getAllCheckins: async (parent, _args, { db }, info) => {
+    getAllCheckins: async (parent, _args) => {
       const result = await db.checkin.findAll({ include: { model: db.user } });
       console.log(result);
       return result;
     },
 
-    getOneCheckinForUser: async (parent, _args, { db }, info) => {
+    getOneCheckinForUser: async (parent, _args) => {
       const result = await db.checkin.findByPk(_args.id, {
         include: { model: db.user },
       });
       return result;
     },
 
-    getAllTrainingTypes: async (parent, _args, { db }, info) => {
+    getAllTrainingTypes: async (parent, _args) => {
       const result = await db.trainingType.findAll();
       return result;
     },
 
-    getAllPlaces: async (parent, _args, { db }, info) => {
+    getAllPlaces: async (parent, _args) => {
       const result = await db.place.findAll();
       return result;
     },
 
-    getAllReservations: async (parent, _args, { db }, info) => {
+    getAllReservations: async (parent, _args) => {
       const result = await db.reservation.findAll({
         include: [{ model: db.user }, { model: db.training }],
       });
       return result;
     },
 
-    getAllReservationsForUser: async (parent, { id }, { db }, info) => {
+    getAllReservationsForUser: async (parent, { id }) => {
       const result = await db.reservation.findAll({
         where: { userId: id },
         include: [
@@ -59,14 +60,14 @@ module.exports = {
       return result;
     },
 
-    getAllTrainings: async (parent, _args, { db }, info) => {
+    getAllTrainings: async (parent, _args) => {
       const result = await db.training.findAll({
         include: [db.trainingType, db.place],
       });
       return result;
     },
 
-    getTrainingThisDay: async (parent, { date }, { db }, info) => {
+    getTrainingThisDay: async (parent, { date }) => {
       const result = await db.training.findAll({
         where: { date: date },
         include: [
@@ -78,7 +79,7 @@ module.exports = {
       return result;
     },
 
-    getFeedbacksForUser: async (parent, { id }, { db }, info) => {
+    getFeedbacksForUser: async (parent, { id }) => {
       const result = await db.feedback.findAll({
         where: { userId: id },
         include: [
@@ -92,7 +93,7 @@ module.exports = {
     },
   },
   Mutation: {
-    makeReservation: async (parent, { userId, trainingId }, { db }, info) => {
+    makeReservation: async (parent, { userId, trainingId }) => {
       const newReservation = await db.reservation.create({
         userId,
         trainingId,
@@ -100,35 +101,35 @@ module.exports = {
       return newReservation;
     },
 
-    removeReservation: async (parent, { reservationId }, { db }, info) => {
+    removeReservation: async (parent, { reservationId }) => {
       const ciaoReservation = await db.reservation.findByPk(reservationId);
       await ciaoReservation.destroy();
       return ciaoReservation;
     },
 
-    addFeedback: async (parent, _args, { db }, info) => {
+    addFeedback: async (parent, _args) => {
       const newFeedback = await db.feedback.create(_args);
       return newFeedback;
     },
 
-    addCheckin: async (parent, _args, { db }, info) => {
+    addCheckin: async (parent, _args) => {
       const newCheckin = await db.checkin.create(_args);
       return newCheckin;
     },
 
-    switchBlockStatus: async (parent, { userId }, { db }, info) => {
+    switchBlockStatus: async (parent, { userId }) => {
       const userToSwitch = await db.user.findByPk(userId);
       const newStatus = !userToSwitch.isBlocked;
       await userToSwitch.update({ isBlocked: newStatus });
       return userToSwitch;
     },
 
-    addTrainingType: async (parent, _args, { db }, info) => {
+    addTrainingType: async (parent, _args) => {
       const newTrainingType = await db.trainingType.create(_args);
       return newTrainingType;
     },
 
-    modifyTrainingType: async (parent, _args, { db }, info) => {
+    modifyTrainingType: async (parent, _args) => {
       const modifiedTrainingType = await db.trainingType.findByPk(
         _args.trainingTypeId
       );
@@ -136,47 +137,47 @@ module.exports = {
       return modifiedTrainingType;
     },
 
-    removeTrainingType: async (parent, { trainingTypeId }, { db }, info) => {
+    removeTrainingType: async (parent, { trainingTypeId }) => {
       const ciaoTrainingType = await db.trainingType.findByPk(trainingTypeId);
       await ciaoTrainingType.destroy();
       return ciaoTrainingType;
     },
 
-    addTraining: async (parent, _args, { db }, info) => {
+    addTraining: async (parent, _args) => {
       const newTraining = await db.training.create(_args);
       return newTraining;
     },
 
-    modifyTraining: async (parent, _args, { db }, info) => {
+    modifyTraining: async (parent, _args) => {
       const modifiedTraining = await db.training.findByPk(_args.trainingId);
       await modifiedTraining.update(_args);
       return modifiedTraining;
     },
 
-    removeTraining: async (parent, { trainingId }, { db }, info) => {
+    removeTraining: async (parent, { trainingId }) => {
       const ciaoTraining = await db.training.findByPk(trainingId);
       await ciaoTraining.destroy();
       return ciaoTraining;
     },
 
-    addPlace: async (parent, _args, { db }, info) => {
+    addPlace: async (parent, _args) => {
       const newPlace = await db.place.create(_args);
       return newPlace;
     },
 
-    modifyPlace: async (parent, _args, { db }, info) => {
+    modifyPlace: async (parent, _args) => {
       const modifiedPlace = await db.training.findByPk(_args.placeId);
       await modifiedPlace.update(_args);
       return modifiedPlace;
     },
 
-    removePlace: async (parent, { placeId }, { db }, info) => {
+    removePlace: async (parent, { placeId }) => {
       const ciaoPlace = await db.place.findByPk(placeId);
       await ciaoPlace.destroy();
       return ciaoPlace;
     },
 
-    login: async (parent, { email, password }, { db }, info) => {
+    login: async (parent, { email, password }) => {
       const loginUser = await db.user.findOne({ email });
       if (!loginUser) {
         return new ApolloError("User with that email not found", 400);
@@ -187,7 +188,7 @@ module.exports = {
       const token = toJWT({ userId: loginUser.id });
       return { token };
     },
-    signup: async (parent, { email, password }, { db }, info) => {
+    signup: async (parent, { email, password }) => {
       const singupUser = await db.user.create({
         email: email,
         password: bcrypt.hashSync(password, SALT_ROUNDS),
