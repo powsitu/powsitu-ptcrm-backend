@@ -19,6 +19,7 @@ async function auth(req) {
     if (!user) {
       throw new ApolloError("User does not exist", 404);
     }
+    console.log(user.dataValues);
     return user.dataValues;
   } catch (error) {
     console.log("ERROR IN AUTH MIDDLEWARE", error);
