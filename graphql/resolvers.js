@@ -5,10 +5,17 @@ const { SALT_ROUNDS } = require("../config/myVars");
 const db = require("../models");
 const auth = require("../auth/middleware");
 
+function areYouAdmin(user) {
+  if (!user.isAdmin) {
+    throw new ApolloError("You need to be an admin for this action", 401);
+  }
+}
+
 module.exports = {
   Query: {
     getAllUsers: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const result = await db.user.findAll();
       return result;
     },
@@ -21,6 +28,7 @@ module.exports = {
 
     getAllCheckins: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const result = await db.checkin.findAll({ include: { model: db.user } });
       return result;
     },
@@ -47,6 +55,7 @@ module.exports = {
 
     getAllReservations: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const result = await db.reservation.findAll({
         include: [{ model: db.user }, { model: db.training }],
       });
@@ -134,6 +143,7 @@ module.exports = {
 
     switchBlockStatus: async (parent, { userId }, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const userToSwitch = await db.user.findByPk(userId);
       const newStatus = !userToSwitch.isBlocked;
       await userToSwitch.update({ isBlocked: newStatus });
@@ -142,12 +152,14 @@ module.exports = {
 
     addTrainingType: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const newTrainingType = await db.trainingType.create(_args);
       return newTrainingType;
     },
 
     modifyTrainingType: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const modifiedTrainingType = await db.trainingType.findByPk(
         _args.trainingTypeId
       );
@@ -157,6 +169,7 @@ module.exports = {
 
     removeTrainingType: async (parent, { trainingTypeId }, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const ciaoTrainingType = await db.trainingType.findByPk(trainingTypeId);
       await ciaoTrainingType.destroy();
       return ciaoTrainingType;
@@ -164,12 +177,14 @@ module.exports = {
 
     addTraining: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const newTraining = await db.training.create(_args);
       return newTraining;
     },
 
     modifyTraining: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const modifiedTraining = await db.training.findByPk(_args.trainingId);
       await modifiedTraining.update(_args);
       return modifiedTraining;
@@ -177,6 +192,7 @@ module.exports = {
 
     removeTraining: async (parent, { trainingId }, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const ciaoTraining = await db.training.findByPk(trainingId);
       await ciaoTraining.destroy();
       return ciaoTraining;
@@ -184,12 +200,14 @@ module.exports = {
 
     addPlace: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const newPlace = await db.place.create(_args);
       return newPlace;
     },
 
     modifyPlace: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const modifiedPlace = await db.training.findByPk(_args.placeId);
       await modifiedPlace.update(_args);
       return modifiedPlace;
@@ -197,13 +215,15 @@ module.exports = {
 
     removePlace: async (parent, { placeId }, { req }) => {
       const user = await auth(req);
+      areYouAdmin(user);
       const ciaoPlace = await db.place.findByPk(placeId);
       await ciaoPlace.destroy();
       return ciaoPlace;
     },
 
     login: async (parent, { email, password }) => {
-      const loginUser = await db.user.findOne({ email });
+      const loginUser = await db.user.findOne({ where: { email } });
+      console.log(loginUser);
       if (!loginUser) {
         return new ApolloError("User with that email not found", 400);
       }
