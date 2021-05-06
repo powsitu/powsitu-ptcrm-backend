@@ -1,11 +1,11 @@
 const { gql } = require("apollo-server-express");
-const { GraphQLScalarType, Kind } = require('graphql');
+const { GraphQLScalarType, Kind } = require("graphql");
 
 // adding a custom scalar type to graphql for date types
 // code found here: https://www.apollographql.com/docs/apollo-server/schema/custom-scalars/
 const dateScalar = new GraphQLScalarType({
-  name: 'Date',
-  description: 'Date custom scalar type',
+  name: "Date",
+  description: "Date custom scalar type",
   serialize(value) {
     return value.getTime(); // Convert outgoing Date to integer for JSON
   },
@@ -19,7 +19,6 @@ const dateScalar = new GraphQLScalarType({
     return null; // Invalid hard-coded value (not an integer)
   },
 });
-
 
 const typeDefs = gql`
   scalar Date
@@ -100,35 +99,86 @@ const typeDefs = gql`
   }
 
   type Query {
-    users: [User]
-    user(id: ID!): User
-    checkins: [Checkin]
-    checkinForUser(id: ID!): Checkin
-    trainingTypes: [TrainingType]
-    places: [Place]
-    images: [Image]
-    trainings: [Training]
-    trainingThisDay(date: String!): [Training]
-    feedbacks: [Feedback]
-    feedbackForUser(id: ID!): [Feedback]
-    reservations: [Reservation]
-    reservationsForUser(id: ID!): [Reservation]
+    getAllUsers: [User]
+    getOneUser(id: ID!): User
+    getAllCheckins: [Checkin]
+    getOneCheckinForUser(id: ID!): Checkin
+    getAllTrainingTypes: [TrainingType]
+    getAllPlaces: [Place]
+    getAllImages: [Image]
+    getAllTrainings: [Training]
+    getTrainingThisDay(date: String!): [Training]
+    getAllFeedbacks: [Feedback]
+    getFeedbacksForUser(id: ID!): [Feedback]
+    getAllReservations: [Reservation]
+    getOneReservationsForUser(id: ID!): [Reservation]
   }
 
   type Mutation {
     makeReservation(userId: ID!, trainingId: Int!): Reservation!
     removeReservation(reservationId: ID!): Reservation!
-    addFeedback(userId: ID!, trainingId: Int!, rating: Int, comment: String): Feedback!
-    addCheckin(userId: ID!,date: String, calories: Int, proteins: Int, carbs: Int, fats: Int, dailyRating: Int, comment: String): Checkin!
+    addFeedback(
+      userId: ID!
+      trainingId: Int!
+      rating: Int
+      comment: String
+    ): Feedback!
+    addCheckin(
+      userId: ID!
+      date: String
+      calories: Int
+      proteins: Int
+      carbs: Int
+      fats: Int
+      dailyRating: Int
+      comment: String
+    ): Checkin!
     switchBlockStatus(userId: ID!): User!
-    addTrainingType(name: String, description: String, intensity: String): TrainingType!
-    modifyTrainingType(trainingTypeId: ID!,name: String, description: String, intensity: String): TrainingType!
+    addTrainingType(
+      name: String
+      description: String
+      intensity: String
+    ): TrainingType!
+    modifyTrainingType(
+      trainingTypeId: ID!
+      name: String
+      description: String
+      intensity: String
+    ): TrainingType!
     removeTrainingType(trainingTypeId: ID!): TrainingType!
-    addTraining(date: String, time: String, attendees: Int, isBookable: Boolean, placeId: Int, trainingTypeId: Int): Training!
-    modifyTraining(trainingId: ID!,date: String, time: String, attendees: Int, isBookable: Boolean, placeId: Int, trainingTypeId: Int): Training!
+    addTraining(
+      date: String
+      time: String
+      attendees: Int
+      isBookable: Boolean
+      placeId: Int
+      trainingTypeId: Int
+    ): Training!
+    modifyTraining(
+      trainingId: ID!
+      date: String
+      time: String
+      attendees: Int
+      isBookable: Boolean
+      placeId: Int
+      trainingTypeId: Int
+    ): Training!
     removeTraining(trainingId: ID!): Training!
-    addPlace(street: String, city: String, zip: String, country: String, description: String): Place!
-    modifyPlace(placeId: Int,street: String, city: String, zip: String, country: String, description: String): Place!
+    addPlace(
+      street: String
+      city: String
+      zip: String
+      country: String
+      description: String
+    ): Place!
+    modifyPlace(
+      placeId: Int
+      street: String
+      city: String
+      zip: String
+      country: String
+      description: String
+    ): Place!
     removePlace(placeId: Int): Place!
   }
 `;
