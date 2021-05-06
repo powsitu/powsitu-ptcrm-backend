@@ -78,6 +78,7 @@ const typeDefs = gql`
     isBookable: Boolean
     place: Place
     trainingType: TrainingType!
+    users: [User]
   }
 
   type Feedback {
@@ -116,6 +117,7 @@ const typeDefs = gql`
 
   type Mutation {
     login(email: String!, password: String!): Login!
+    signup(email: String!, password: String!): Login!
     makeReservation(userId: ID!, trainingId: Int!): Reservation!
     removeReservation(reservationId: ID!): Reservation!
     addFeedback(

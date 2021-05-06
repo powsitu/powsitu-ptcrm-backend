@@ -1,5 +1,7 @@
 const { ApolloError } = require("apollo-server-express");
 const bcrypt = require("bcrypt");
+const { toJWT } = require("../auth/jwt");
+const { SALT_ROUNDS } = require("../config/myVars");
 
 module.exports = {
   Query: {
@@ -70,7 +72,7 @@ module.exports = {
         include: [
           { model: db.trainingType },
           { model: db.place },
-          { model: db.reservation }, // not showing up in the playground, not sure why. Matias, help!!!!!
+          { model: db.user },
         ],
       });
       return result;
@@ -176,14 +178,23 @@ module.exports = {
 
     login: async (parent, { email, password }, { db }, info) => {
       const loginUser = await db.user.findOne({ email });
-      let message;
-      if (loginUser && bcrypt.compareSync(password, loginUser.password)) {
-        message = "password ok";
-        return console.log(message);
-      } else {
-        message = "wrong password!";
-        return console.log(message);
+      if (!loginUser) {
+        return new ApolloError("User with that email not found", 400);
       }
+      if (!bcrypt.compareSync(password, loginUser.password)) {
+        return new ApolloError("Password incorrect", 400);
+      }
+      const token = toJWT({ userId: loginUser.id });
+      return { token };
+    },
+    signup: async (parent, { email, password }, { db }, info) => {
+      const singupUser = await db.user.create({
+        email: email,
+        password: bcrypt.hashSync(password, SALT_ROUNDS),
+      });
+      delete singupUser.dataValues["password"];
+      const token = toJWT({ userId: singupUser.id });
+      return { token };
     },
   },
 };
