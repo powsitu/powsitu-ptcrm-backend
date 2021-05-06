@@ -1,8 +1,8 @@
-const express = require('express');
-const corsMiddleWare = require('cors')
+const express = require("express");
+const corsMiddleWare = require("cors");
 
 const app = express();
-const PORT = 4000;
+const { PORT } = require("./config/myVars");
 
 // applying middlewares
 app.use(corsMiddleWare());
