@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   checkin.init({
     userId: {type: DataTypes.INTEGER, allowNull: false},
-    date: DataTypes.DATE,
+    date: DataTypes.STRING,
     calories: DataTypes.INTEGER,
     proteins: DataTypes.INTEGER,
     carbs: DataTypes.INTEGER,

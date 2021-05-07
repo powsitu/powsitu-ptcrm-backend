@@ -19,7 +19,7 @@ module.exports = {
         onDelete: "SET NULL"
       },
       date: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       calories: {
         type: Sequelize.INTEGER

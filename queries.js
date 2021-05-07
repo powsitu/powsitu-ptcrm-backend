@@ -42,4 +42,17 @@ async function getAUserWithReservationsAndType(id) {
   return list.get({ plain: true});
 }
 
-getAUserWithReservationsAndType(1).then(user => console.log(user));
+//getAUserWithReservationsAndType(1).then(user => console.log(user));
+
+async function testingGQL() {
+  const list = await checkin.findAll({
+    attributes: ["comment", "userId"],
+    include: {
+      model: user,
+      attributes: ["firstName"]
+    }
+  })
+  return list.map(list => list.get({ plain: true}));
+}
+
+testingGQL().then(comment => console.log(comment));
