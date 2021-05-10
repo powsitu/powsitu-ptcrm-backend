@@ -231,7 +231,7 @@ module.exports = {
         return new ApolloError("Password incorrect", 400);
       }
       const token = toJWT({ userId: loginUser.id });
-      return { token };
+      return { token, user: loginUser };
     },
     signup: async (parent, { email, password }) => {
       const singupUser = await db.user.create({
