@@ -13,6 +13,11 @@ function areYouAdmin(user) {
 
 module.exports = {
   Query: {
+    checkToken: async (parent, _args, { req }, info) => {
+      const user = await auth(req);
+      return user;
+    },
+
     getAllUsers: async (parent, _args, { req }) => {
       const user = await auth(req);
       areYouAdmin(user);

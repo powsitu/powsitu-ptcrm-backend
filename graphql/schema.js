@@ -101,6 +101,7 @@ const typeDefs = gql`
   }
 
   type Query {
+    checkToken: User
     getAllUsers: [User]
     getOneUser(id: ID!): User
     getAllCheckins: [Checkin]
