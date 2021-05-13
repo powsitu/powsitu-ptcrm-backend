@@ -1,47 +1,47 @@
-'use strict';
+"use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('trainings', {
+    await queryInterface.createTable("trainings", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       date: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       time: {
-        type: Sequelize.TIME
+        type: Sequelize.TIME,
       },
       attendees: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       isBookable: {
         type: Sequelize.BOOLEAN,
-        defaultValue: true
+        defaultValue: true,
       },
       trainingTypeId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: "trainingTypes",
-          key: "id"
+          key: "id",
         },
         onUpdate: "CASCADE",
-        onDelete: "SET NULL"
+        onDelete: "CASCADE",
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('trainings');
-  }
+    await queryInterface.dropTable("trainings");
+  },
 };

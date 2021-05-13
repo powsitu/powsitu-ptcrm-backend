@@ -118,7 +118,12 @@ const typeDefs = gql`
 
   type Mutation {
     login(email: String!, password: String!): Login!
-    signup(email: String!, password: String!): Login!
+    signup(
+      email: String!
+      password: String!
+      firstName: String
+      lastName: String
+    ): Login!
     makeReservation(userId: ID!, trainingId: Int!): Reservation!
     removeReservation(reservationId: ID!): Reservation!
     addFeedback(

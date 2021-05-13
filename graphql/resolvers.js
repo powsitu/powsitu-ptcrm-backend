@@ -233,14 +233,16 @@ module.exports = {
       const token = toJWT({ userId: loginUser.id });
       return { token, user: loginUser };
     },
-    signup: async (parent, { email, password }) => {
+    signup: async (parent, { email, password, firstName, lastName }) => {
       const singupUser = await db.user.create({
         email: email,
         password: bcrypt.hashSync(password, SALT_ROUNDS),
+        firstName: firstName,
+        lastName: lastName,
       });
       delete singupUser.dataValues["password"];
       const token = toJWT({ userId: singupUser.id });
-      return { token };
+      return { token, user: singupUser };
     },
   },
 };
