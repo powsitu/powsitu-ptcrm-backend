@@ -146,13 +146,13 @@ const typeDefs = gql`
     addTrainingType(
       name: String
       description: String
-      intensity: String
+      intensity: Int
     ): TrainingType!
     modifyTrainingType(
       trainingTypeId: ID!
       name: String
       description: String
-      intensity: String
+      intensity: Int
     ): TrainingType!
     removeTrainingType(trainingTypeId: ID!): TrainingType!
     addTraining(
