@@ -38,9 +38,10 @@ module.exports = {
       return result;
     },
 
-    getOneCheckinForUser: async (parent, _args, { req }) => {
+    getCheckinForUser: async (parent, _args, { req }) => {
       const user = await auth(req);
-      const result = await db.checkin.findByPk(_args.id, {
+      const result = await db.checkin.findAll({
+        where: { userId: _args.id },
         include: { model: db.user },
       });
       return result;

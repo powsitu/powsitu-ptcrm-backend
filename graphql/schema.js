@@ -105,7 +105,7 @@ const typeDefs = gql`
     getAllUsers: [User]
     getOneUser(id: ID!): User
     getAllCheckins: [Checkin]
-    getOneCheckinForUser(id: ID!): Checkin
+    getCheckinForUser(id: ID!): [Checkin]
     getAllTrainingTypes: [TrainingType]
     getAllPlaces: [Place]
     getAllImages: [Image]
