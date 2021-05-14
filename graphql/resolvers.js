@@ -11,6 +11,12 @@ function areYouAdmin(user) {
   }
 }
 
+function areYouBlocked(user) {
+  if (user.isBlocked) {
+    throw new ApolloError("Blocked users cannot perform this action", 401);
+  }
+}
+
 module.exports = {
   Query: {
     checkToken: async (parent, _args, { req }, info) => {
@@ -40,6 +46,7 @@ module.exports = {
 
     getCheckinForUser: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouBlocked(user);
       const result = await db.checkin.findAll({
         where: { userId: _args.id },
         include: { model: db.user },
@@ -70,6 +77,7 @@ module.exports = {
 
     getAllReservationsForUser: async (parent, { id }, { req }) => {
       const user = await auth(req);
+      areYouBlocked(user);
       const result = await db.reservation.findAll({
         where: { userId: id },
         include: [
@@ -93,6 +101,7 @@ module.exports = {
 
     getTrainingThisDay: async (parent, { date }, { req }) => {
       const user = await auth(req);
+      areYouBlocked(user);
       const result = await db.training.findAll({
         where: { date: date },
         include: [
@@ -106,6 +115,7 @@ module.exports = {
 
     getFeedbacksForUser: async (parent, { id }, { req }) => {
       const user = await auth(req);
+      areYouBlocked(user);
       const result = await db.feedback.findAll({
         where: { userId: id },
         include: [
@@ -121,6 +131,7 @@ module.exports = {
   Mutation: {
     makeReservation: async (parent, { userId, trainingId }, { req }) => {
       const user = await auth(req);
+      areYouBlocked(user);
       const newReservation = await db.reservation.create({
         userId,
         trainingId,
@@ -130,6 +141,7 @@ module.exports = {
 
     removeReservation: async (parent, { reservationId }, { req }) => {
       const user = await auth(req);
+      areYouBlocked(user);
       const ciaoReservation = await db.reservation.findByPk(reservationId);
       await ciaoReservation.destroy();
       return ciaoReservation;
@@ -137,12 +149,14 @@ module.exports = {
 
     addFeedback: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouBlocked(user);
       const newFeedback = await db.feedback.create(_args);
       return newFeedback;
     },
 
     addCheckin: async (parent, _args, { req }) => {
       const user = await auth(req);
+      areYouBlocked(user);
       const newCheckin = await db.checkin.create(_args);
       return newCheckin;
     },
@@ -229,7 +243,6 @@ module.exports = {
 
     login: async (parent, { email, password }) => {
       const loginUser = await db.user.findOne({ where: { email } });
-      console.log(loginUser);
       if (!loginUser) {
         return new ApolloError("User with that email not found", 400);
       }
